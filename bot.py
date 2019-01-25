@@ -56,7 +56,7 @@ def get_doc():
 
 @track_metrica("start")
 def start(bot, update):
-    keyboard = [InlineKeyboardButton(name) for name in options]
+    keyboard = [InlineKeyboardButton(name, callback_data=str(idx)) for idx, name in enumerate(options)]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text('Привет! Я умею показывать результаты ЧГК. Выбери:', reply_markup=reply_markup)
 
