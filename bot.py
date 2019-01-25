@@ -67,7 +67,18 @@ def help(bot, update):
                 "/final_results": "результаты за вычетом 2 худших игр"}
     update.message.reply_text("\n".join([k + " " + v for k, v in commands.iteritems()]))
 
+@track_metrica("button")
+def button(bot, update):
+    query = update.callback_query
 
+    bot.edit_message_text(text="Выбрано: {}".format(query.data),
+                          chat_id=query.message.chat_id,
+                          message_id=query.message.message_id)
+
+    if query == '0':
+        results(bot, update)
+    if query == '1':
+        final_results(bot, update)
 
 def getCommands(sheetX):
     commands = map(unicode, sheetX[u'Команда'])
