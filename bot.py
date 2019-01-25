@@ -1,11 +1,12 @@
 # coding: utf-8
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
-import urllib2
+import urllib3
 import pandas as pd
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import time
 
+TOKEN = ""
 URL = "http://old1.club60sec.ru/calendar/6662/"
 FILE = "chgk_res.xls"
 args = {"LAST_UPDATE_TIME" : 0}
@@ -31,10 +32,10 @@ def track_metrica(handler):
 def get_doc():
     #cache results
     if time.time() - args["LAST_UPDATE_TIME"] < update_interval:
-        print "Cached"
+        print("Cached")
         return
 
-    response = urllib2.urlopen(URL)
+    response = urllib3.urlopen(URL)
     soup = BeautifulSoup(response.read())
 
     dropbox_href = None
@@ -46,7 +47,7 @@ def get_doc():
 
     dropbox_href = "=".join(dropbox_href.split("=")[:-1] + ["1"])
 
-    response = urllib2.urlopen(dropbox_href)
+    response = urllib3.urlopen(dropbox_href)
     with open(FILE, "w") as f:
         args["LAST_UPDATE_TIME"] = time.time()
         f.write(response.read())
@@ -136,7 +137,7 @@ def error(bot, update, error):
 
 
 def main():
-    updater = Updater("")
+    updater = Updater(TOKEN)
 
     dp = updater.dispatcher
 
