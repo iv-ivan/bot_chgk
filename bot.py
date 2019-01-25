@@ -7,7 +7,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import time
 
-TOKEN = ""
+TOKEN = "774150692:AAGoyMjFOWUlt7MsGu5Rez-VmjVxJcVPF1M"
 URL = "http://old1.club60sec.ru/calendar/6662/"
 FILE = "chgk_res.xls"
 args = {"LAST_UPDATE_TIME" : 0}
@@ -37,7 +37,8 @@ def get_doc():
         print("Cached")
         return
 
-    response = urllib3.urlopen(URL)
+    http = urllib3.PoolManager()
+    response = http.request('GET', URL)
     soup = BeautifulSoup(response.read())
 
     dropbox_href = None
@@ -49,14 +50,14 @@ def get_doc():
 
     dropbox_href = "=".join(dropbox_href.split("=")[:-1] + ["1"])
 
-    response = urllib3.urlopen(dropbox_href)
+    response = http.request('GET', dropbox_href)
     with open(FILE, "w") as f:
         args["LAST_UPDATE_TIME"] = time.time()
         f.write(response.read())
 
 @track_metrica("start")
 def start(bot, update):
-    keyboard = [InlineKeyboardButton(name, callback_data=str(idx)) for idx, name in enumerate(options)]
+    keyboard = [[InlineKeyboardButton(name, callback_data=str(idx))] for idx, name in enumerate(options)]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text('Привет! Я умею показывать результаты ЧГК. Выбери:', reply_markup=reply_markup)
 
