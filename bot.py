@@ -1,6 +1,5 @@
 # coding: utf-8
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from telebot import types
 import logging
 import urllib3
 import pandas as pd
@@ -56,8 +55,7 @@ def get_doc():
 
 @track_metrica("start")
 def start(bot, update):
-    update.message.reply_text('Привет! Я умею показывать результаты ЧГК. Используй /help')
-    keyboard = [InlineKeyboardButton(name) for name in options)]
+    keyboard = [InlineKeyboardButton(name) for name in options]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text('Привет! Я умею показывать результаты ЧГК. Выбери:', reply_markup=reply_markup)
 
