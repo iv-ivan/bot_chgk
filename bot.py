@@ -75,9 +75,9 @@ def button(bot, update):
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id)
 
-    if query == '0':
+    if query.data == '0':
         results(bot, update)
-    if query == '1':
+    if query.data == '1':
         final_results(bot, update)
 
 def getCommands(sheetX):
