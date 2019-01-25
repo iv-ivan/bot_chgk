@@ -1,5 +1,6 @@
 # coding: utf-8
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telebot import types
 import logging
 import urllib3
 import pandas as pd
@@ -13,6 +14,7 @@ args = {"LAST_UPDATE_TIME" : 0}
 update_interval = 5 * 60
 N_COMMANDS = 15
 LOGS_FILE="logs.txt"
+options = ['Текущие результаты','Финальные результаты']
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -55,12 +57,16 @@ def get_doc():
 @track_metrica("start")
 def start(bot, update):
     update.message.reply_text('Привет! Я умею показывать результаты ЧГК. Используй /help')
+    keyboard = [InlineKeyboardButton(name) for name in options)]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text('Привет! Я умею показывать результаты ЧГК. Выбери:', reply_markup=reply_markup)
 
 @track_metrica("help")
 def help(bot, update):
     commands = {"/results": "результаты по всем играм",
                 "/final_results": "результаты за вычетом 2 худших игр"}
     update.message.reply_text("\n".join([k + " " + v for k, v in commands.iteritems()]))
+
 
 
 def getCommands(sheetX):
