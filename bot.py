@@ -6,7 +6,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import time
 
-TOKEN = "774150692:AAGoyMjFOWUlt7MsGu5Rez-VmjVxJcVPF1M"
+TOKEN = ""
 URL = "http://old1.club60sec.ru/calendar/6662/"
 FILE = "chgk_res.xls"
 args = {"LAST_UPDATE_TIME" : 0}
