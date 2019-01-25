@@ -1,4 +1,5 @@
 # coding: utf-8
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import urllib3
