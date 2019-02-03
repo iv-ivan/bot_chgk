@@ -1,15 +1,14 @@
 # coding: utf-8
-from resource import Resource, open_league_fetch
+from resource import Resource, open_league_fetch, ResourcePlanner, Schedule
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import urllib3
 import pandas as pd
 import time
+import threading
 
 TOKEN = "774150692:AAGoyMjFOWUlt7MsGu5Rez-VmjVxJcVPF1M"
-args = {"LAST_UPDATE_TIME" : 0}
-update_interval = 5 * 60
 N_COMMANDS = 15
 
 LOGS_FILE="logs.txt"
@@ -70,8 +69,7 @@ def parse_matrix(sheetX):
 
 @logging("results")
 def results(bot, update):
-    openLeagueResults.update()
-    xls = pd.ExcelFile(openLeagueResults.file)
+    xls = pd.ExcelFile(openLeagueResults.file())
     sheetX = xls.parse(0)
     commands, maxN = getCommands(sheetX)
     points = list(map(str, sheetX[u'сум']))[:maxN]
@@ -91,8 +89,7 @@ def cast_x(x):
 
 @logging("final_results")
 def final_results(bot, update):
-    openLeagueResults.update()
-    xls = pd.ExcelFile(openLeagueResults.file)
+    xls = pd.ExcelFile(openLeagueResults.file())
     sheetX = xls.parse(0)
     commands, maxN = getCommands(sheetX)
 
@@ -107,7 +104,7 @@ def final_results(bot, update):
    		points[i].sort()
    		points[i] = points[i][2:]
    		points[i] = sum(points[i])
-    command_points = zip(commands[:maxN], points)
+    command_points = list(zip(commands[:maxN], points))
     command_points.sort(key=lambda x: -x[1])
     command_points = list(map(lambda x: x[0] + " - " + str(x[1]), command_points))
 
@@ -124,6 +121,10 @@ def error(bot, update, error):
 
 
 def main():
+    resourcePlanner = ResourcePlanner(openLeagueResults, Schedule(), 60*60*12)
+    t1 = threading.Thread(target = resourcePlanner.run)
+    t1.start()
+
     updater = Updater(TOKEN)
 
     dp = updater.dispatcher

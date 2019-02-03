@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import datetime
+import time
 
 class Resource(object):
 	def __init__(self, file: str, fetch_function):
@@ -46,3 +48,32 @@ def open_league_fetch():
 
     response = requests.get(dropbox_href)
     return response.content
+
+
+class Schedule(object):
+	def __init__(self):
+		self.points = []
+		self.current_point_index = None
+
+	def add_point(self, day, hour, minute):
+		self.points.append((day, hout, minute))
+
+	def update_current_point(self):
+		#TODO
+		return True
+
+class ResourcePlanner(object):
+	def __init__(self, res: Resource, schedule: Schedule, period):
+		self.resource = res
+		self.schedule = schedule
+		self.period = period
+
+	def run(self):
+		while True:
+			if self.schedule.update_current_point():
+				try:
+					self.resource.update()
+				except Exception, e:
+					print(str(e))
+			time.sleep(self.period)
+
