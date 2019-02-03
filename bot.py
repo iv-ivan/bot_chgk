@@ -69,7 +69,7 @@ def parse_matrix(sheetX):
 
 @logging("results")
 def results(bot, update):
-    xls = pd.ExcelFile(openLeagueResults.file())
+    xls = pd.ExcelFile(openLeagueResults.file)
     sheetX = xls.parse(0)
     commands, maxN = getCommands(sheetX)
     points = list(map(str, sheetX[u'сум']))[:maxN]
@@ -89,7 +89,7 @@ def cast_x(x):
 
 @logging("final_results")
 def final_results(bot, update):
-    xls = pd.ExcelFile(openLeagueResults.file())
+    xls = pd.ExcelFile(openLeagueResults.file)
     sheetX = xls.parse(0)
     commands, maxN = getCommands(sheetX)
 

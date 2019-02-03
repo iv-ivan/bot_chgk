@@ -12,9 +12,6 @@ class Resource(object):
 	def get(self):
 		return open(self.file).read()
 
-	def file(self):
-		return self.file
-
 	def update(self):
 		is_changed = False
 		current_content = self._fetch()
@@ -73,7 +70,7 @@ class ResourcePlanner(object):
 			if self.schedule.update_current_point():
 				try:
 					self.resource.update()
-				except Exception, e:
+				except Exception as e:
 					print(str(e))
 			time.sleep(self.period)
 
